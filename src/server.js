@@ -1,28 +1,24 @@
 const app = require("./app");
 const { PrismaClient } = require("@prisma/client");
-// const { initializeRedis } = require('./utils/redisClient'); // Comment this out
+const { initializeRedis } = require('./utils/redisClient'); 
 
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 3000;
 
-// Initialize database and start server
 const startServer = async () => {
   try {
-    // Test database connection
     await prisma.$connect();
     console.log(" Database connected successfully");
 
-    // Redis is optional - comment out
-    // await initializeRedis();
+   
+    await initializeRedis();
 
-    // Start server
     const server = app.listen(PORT, () => {
       console.log(` Server running on port ${PORT}`);
       console.log(` Environment: ${process.env.NODE_ENV || "development"}`);
       console.log(` API URL: http://localhost:${PORT}`);
     });
 
-    // Graceful shutdown
     const gracefulShutdown = async () => {
       console.log("Received shutdown signal, closing connections...");
 
